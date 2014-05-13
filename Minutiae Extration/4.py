@@ -36,7 +36,6 @@ def extrmin(img, z):
 	for i in range(2, x - 2):
 		for j in range(2, y - 2):
 			marcarMin(img, i, j)
-	cv2.imwrite("testeMin%s.bmp"%(z), img)
 
 #Faz nada ainda
 def acharCentro(img):
@@ -45,11 +44,7 @@ def acharCentro(img):
 	while(True):
 		pos = pos + dir
 
-str = 'saidasteste\\saida10%d_%d.bmp'
-# for i in range(1,10):
-	# for j in range(1,2):
-		# img = cv2.imread(str % (i, j),0)
-		# extrmin(img, i)
-
-img = cv2.imread("skel.bmp",0)
+s = '102_6'
+img = cv2.imread(s + "_5.bmp",0)
 extrmin(img, 0)
+cv2.imwrite('102_6_6.bmp', img)
