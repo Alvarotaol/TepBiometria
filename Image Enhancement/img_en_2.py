@@ -6,10 +6,11 @@ from skimage import morphology, img_as_float, img_as_ubyte
 i = 0;
 j = 0;
 
-s = '102_6';
+s = '..\\..\\digi\\102_6';
 
 # Image input
 img = cv2.imread(s + '.tif',0)
+cv2.imwrite(img, 'teste.bmp')
 height, width = img.shape
 size = np.size(img)
 skel = np.zeros(img.shape,np.uint8)
