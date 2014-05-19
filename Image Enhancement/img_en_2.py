@@ -19,14 +19,11 @@ def neibPoint(img, x, y, qt):
     else:
 	return False
 
-<<<<<<< HEAD
-s = '..\\..\\digi\\102_6';
-=======
-def searchPath(img1, img2, x, y):
+def searchPath(img1, img2, x, y, distance):
     a = x;
     b = y;
     img2[a, b] = 100
-    for i in range (0, 10):
+    for i in range (0, distance):
 	for m in range(-1, 2):
 	    for n in range(-1, 2):
 		if img1[a+m, b+n] == 255:
@@ -38,12 +35,10 @@ def searchPath(img1, img2, x, y):
 			return False
     return True
 
-s = '102_1'
->>>>>>> 0a2994d32621b8c77ee6339e355360c60cd7ca75
+s = '101_1'
 
 # Image input
 img = cv2.imread(s + '.tif',0)
-cv2.imwrite(img, 'teste.bmp')
 height, width = img.shape
 size = np.size(img)
 
@@ -134,32 +129,29 @@ ctrl3 = ctrl1.copy()
 # Retiradas de "bifurcacoes" unidas
 for i in range(1, height-1):
     for j in range(1, width-1):
-	if ctrl3[i, j] == 255:
-	    ctrl3[i-1, j-1] = 0
-	    ctrl3[i-1, j] = 0
-	    ctrl3[i-1, j+1] = 0
-	    ctrl3[i, j-1] = 0
-	    ctrl3[i, j+1] = 0
-	    ctrl3[i+1, j-1] = 0
-	    ctrl3[i+1, j] = 0
-	    ctrl3[i+1, j+1] = 0
+        if ctrl3[i][j] == 255:
+            for k in range(-30, 31):
+                for l in range(-30, 31):
+                    if i+k < height and j+l < width:
+                        ctrl3[i+k][j+l] = 0
+            ctrl3[i][j] = 255
 
-cv2.imwrite(s + "_mn_1_clean.bmp", ctrl3)
+# cv2.imwrite(s + "_mn_1_clean.bmp", ctrl3)
 
-# Remocao de bifurcacoes falsas
-for i in range(1, height-1):
-    for j in range(1, width-1):
-	if ctrl1[i, j] == 255:
-	    count = 0
-	    for a in range(-1, 2):
-		for b in range(-1, 2):
-		    if img[i+a, j+b] == 255:
-			ctrl4 = ctrl1.copy()
-			ctrl4[i, j] = 200
-			if searchPath(img, ctrl4, i+a, j+b) == False:
-			    count += 1
-	    if count < 2:
-		ctrl3[i, j] = 0
+## Remocao de bifurcacoes falsas
+#for i in range(1, height-1):
+#    for j in range(1, width-1):
+#	if ctrl1[i, j] == 255:
+#	    count = 0
+#	    for a in range(-1, 2):
+#		for b in range(-1, 2):
+#		    if img[i+a, j+b] == 255:
+#			ctrl4 = ctrl1.copy()
+#			ctrl4[i, j] = 200
+#			if searchPath(img, ctrl4, i+a, j+b) == False:
+#			    count += 1
+#	    if count < 2:
+#		ctrl3[i, j] = 0
 
 # Minutiaes escolhidas
 cv2.imwrite(s + "_mn_1_selection.bmp", ctrl3)
@@ -185,10 +177,20 @@ for i in range(1, height-1):
 		    if img[i+a, j+b] == 255:
 			ctrl4 = ctrl2.copy()
 			ctrl4[i, j] = 200
-			if searchPath(img, ctrl4, i+a, j+b) == False:
+			if searchPath(img, ctrl4, i+a, j+b, 50) == False:
 			    count += 1
 	    if count >= 1:
 		ctrl3[i, j] = 0
+
+# Retiradas de terminais unidos
+for i in range(1, height-1):
+    for j in range(1, width-1):
+        if ctrl3[i][j] == 255:
+            for k in range(-20, 21):
+                for l in range(-20, 21):
+                    if i+k < height and j+l < width:
+                        ctrl3[i+k][j+l] = 0
+            ctrl3[i][j] = 255
 
 # Minutiaes escolhidas
 cv2.imwrite(s + "_mn_2_selection.bmp", ctrl3)
@@ -202,6 +204,7 @@ for i in range(0, height):
 # Minutiaes com a digital no fundo
 cv2.imwrite(s + "_mn_2_selection2.bmp", ctrl3)
 
+# Calculo do core
 img = cv2.imread(s + "_mn_1_selection.bmp", 0)
 tX = 0
 tY = 0
@@ -221,5 +224,29 @@ for i in range(-1, 2):
     for j in range(-1, 2):
 	img[tX+i, tY+j] = 255
 
-
 cv2.imwrite(s + "_core.bmp", img)
+
+# Escolha entre todas as minutiae
+
+img = cv2.imread(s + "_mn_1_selection.bmp", 0)
+img2 = cv2.imread(s + "_mn_2_selection.bmp", 0)
+img3 = img
+img3 = np.zeros(img.shape,np.uint8)
+
+for i in range(0, height):
+    for j in range(0, width):
+        if img[i][j] == 255 or img2[i][j] == 255:
+            if math.sqrt( math.pow(abs(i - tX), 2) + math.pow(abs(j - tY), 2)) < 170:
+                img3[i][j] = 255
+
+# Retiradas de minutiaes unidos
+for i in range(1, height-1):
+    for j in range(1, width-1):
+        if img3[i][j] == 255:
+            for k in range(-20, 21):
+                for l in range(-20, 21):
+                    if i+k < height and j+l < width:
+                        img3[i+k][j+l] = 0
+            img3[i][j] = 255
+
+cv2.imwrite(s + "_minutiae.bmp", img3)
