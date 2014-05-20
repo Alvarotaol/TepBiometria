@@ -6,12 +6,14 @@ def pol(x, y, a, b):
 	ang = np.pi
 	if a-x != 0:
 		ang = np.arctan((b-y)/(a-x))
-	return dist, ang
+	return [dist, ang]
+
+s = '101_1'
 
 img_min = cv2.imread(s + '_minutiae.bmp', 0)
 img_core = cv2.imread(s + '_core.bmp', 0)
-height, width = img.shape
-size = np.size(img)
+height, width = img_min.shape
+size = np.size(img_min)
 
 for i in range (0, height):
     for j in range(0, width):
@@ -19,7 +21,11 @@ for i in range (0, height):
 	    cX = i
 	    cY = j
 
+a = []
+
 for i in range (0, height):
     for j in range(0, width):
-	if img[i, j] == 255:
-	    #ALGO pol(i, j, cX, cY)
+	if img_min[i, j] == 255:
+	    a.append(pol(i, j, cX, cY))
+
+print('.2%f' % a)
