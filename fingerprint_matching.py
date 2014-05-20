@@ -10,16 +10,16 @@ def pol(x, y, a, b):
 
 s = '101_1'
 
+s="101_1"	
 img_min = cv2.imread(s + '_minutiae.bmp', 0)
 img_core = cv2.imread(s + '_core.bmp', 0)
 height, width = img_min.shape
 size = np.size(img_min)
 
 for i in range (0, height):
-    for j in range(0, width):
-	if img_core[i, j] == 255:
-	    cX = i
-	    cY = j
+	for j in range(0, width):
+		if img_core[i, j] == 255:
+			cX,cY = i,j
 
 a = []
 
