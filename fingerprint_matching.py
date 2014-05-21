@@ -8,18 +8,19 @@ def pol(x, y, a, b):
 		ang = np.arctan((b-y)/(a-x))
 	return dist, ang
 
+s="101_1"	
 img_min = cv2.imread(s + '_minutiae.bmp', 0)
 img_core = cv2.imread(s + '_core.bmp', 0)
 height, width = img.shape
 size = np.size(img)
 
 for i in range (0, height):
-    for j in range(0, width):
-	if img_core[i, j] == 255:
-	    cX = i
-	    cY = j
+	for j in range(0, width):
+		if img_core[i, j] == 255:
+			cX,cY = i,j
 
 for i in range (0, height):
-    for j in range(0, width):
-	if img[i, j] == 255:
-	    #ALGO pol(i, j, cX, cY)
+	for j in range(0, width):
+		if img[i, j] == 255:
+			print "mami"
+			#ALGO pol(i, j, cX, cY)
