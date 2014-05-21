@@ -35,7 +35,7 @@ def searchPath(img1, img2, x, y, distance):
 						return False
 	return True
 
-s = '101_1'
+s = '101_3'
 
 # imgrgb = cv2.imread(s + '_skel.bmp', 1)
 img = cv2.imread(s + '_skel.bmp', 0)

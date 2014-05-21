@@ -3,7 +3,7 @@ import numpy as np
 import math
 from skimage import morphology, img_as_float, img_as_ubyte
 
-s = '101_1'
+s = '101_3'
 
 # Image input
 img = cv2.imread(s + '.tif',0)
