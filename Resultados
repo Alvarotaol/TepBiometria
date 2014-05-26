@@ -1,0 +1,5 @@
+Teste 1: 8 amostras de treinamento (4 vetores), 8 + 2 novas amostras de teste (com 8 vetores)
+-Implementação de matching apenas se o tipo for o mesmo (3º valor de uma minutiae
+Resultado: Péssimo
+
+Anotações: as amostras 102_1 e 102_2 estão um pouco diferente.
