@@ -84,28 +84,30 @@ predictList = []
 predictClass = []
 
 # Calculo de matching
-matchCalc('101_1', '101_2', matchList, matchClass, 1)
-matchCalc('102_1', '102_3', matchList, matchClass, 1)
-matchCalc('101_3', '102_3', matchList, matchClass, 0)
-matchCalc('101_4', '102_2', matchList, matchClass, 0)
+s = "resultados/"
+matchCalc(s + '101_1', s + '101_2', matchList, matchClass, 1)
+matchCalc(s + '102_1', s + '102_3', matchList, matchClass, 1)
+matchCalc(s + '101_3', s + '102_3', matchList, matchClass, 0)
 
-matchCalc('101_5', '101_6', predictList, predictClass, 1)
-matchCalc('101_1', '101_6', predictList, predictClass, 1)
-matchCalc('101_1', '101_3', predictList, predictClass, 1)
-matchCalc('101_5', '101_2', predictList, predictClass, 1)
+#matchCalc(s + '101_5', s + '101_6', predictList, predictClass, 1)
+#matchCalc(s + '101_1', s + '101_6', predictList, predictClass, 1)
+matchCalc(s + '101_1', s + '101_3', predictList, predictClass, 1)
+matchCalc(s + '101_5', s + '101_2', predictList, predictClass, 1)
 
-matchCalc('102_1', '101_2', predictList, predictClass, 0)
-matchCalc('102_3', '101_1', predictList, predictClass, 0)
-matchCalc('102_4', '101_5', predictList, predictClass, 0)
-matchCalc('102_2', '101_3', predictList, predictClass, 0)
+matchCalc(s + '102_1', s + '101_2', predictList, predictClass, 0)
+matchCalc(s + '102_3', s + '101_1', predictList, predictClass, 0)
+matchCalc(s + '102_4', s + '101_5', predictList, predictClass, 0)
+matchCalc(s + '102_2', s + '101_3', predictList, predictClass, 0)
 	
 # Aprendizado e verificacao
+print("Match List:\n");
 print(matchList)
 #print(matchClass)
+print("Pred List\n");
 print(predictList)
 #print(predictClass)
 
 clf = svm.SVC(kernel='linear')
 clf.fit(matchList, matchClass)
-
+print("E eu que sei?\n")
 print(clf.predict(predictList))

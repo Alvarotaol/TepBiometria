@@ -1,4 +1,4 @@
-import cv2
+import cv2, sys
 import numpy as np
 import math
 from skimage import morphology, img_as_float, img_as_ubyte
@@ -6,7 +6,8 @@ from skimage import morphology, img_as_float, img_as_ubyte
 
 def imageEnhancement(s):
 	# Image input
-	img = cv2.imread(s + '.tif',0)
+	print s
+	img = cv2.imread("../digi/" + s + '.tif',0)
 	height, width = img.shape
 	size = np.size(img)
 
@@ -45,16 +46,9 @@ def imageEnhancement(s):
 	# Skeleton
 	img = morphology.skeletonize(img_as_float(img))
 	img = img_as_ubyte(img)
-	cv2.imwrite(s + "_skel.bmp", img)
+	cv2.imwrite("resultados/" + s + "_skel.bmp", img)
 	
-
-imageEnhancement('101_1')
-imageEnhancement('101_2')
-imageEnhancement('101_3')
-imageEnhancement('101_4')
-imageEnhancement('101_5')
-imageEnhancement('101_6')
-imageEnhancement('102_1')
-imageEnhancement('102_2')
-imageEnhancement('102_3')
-imageEnhancement('102_4')
+s = "10%i_%i"
+for i in range(1, 3):
+	for j in range(1, int(sys.argv[1])):
+		imageEnhancement(s%(i,j))

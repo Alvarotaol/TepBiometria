@@ -1,4 +1,4 @@
-import cv2
+import cv2, sys
 import numpy as np
 import math
 from skimage import morphology, img_as_float, img_as_ubyte
@@ -131,13 +131,13 @@ def minutiaeExtraction(s):
 	# Escolha entre todas as minutiae
 
 	img1 = cv2.imread(s + "_mn_1_selection.bmp", 0)
-	img2 = cv2.imread(s + "_mn_2_selection.bmp", 0)
+#	img2 = cv2.imread(s + "_mn_2_selection.bmp", 0)
 	img3 = img1
 	img3 = np.zeros(img1.shape,np.uint8)
 
 	for i in range(0, height):
 		for j in range(0, width):
-			if img1[i][j] == 255 or img2[i][j] == 255:
+			if img1[i][j] == 255: #or img2[i][j] == 255:
 				if math.sqrt( math.pow(abs(i - tX), 2) + math.pow(abs(j - tY), 2)) < 170:
 					img3[i][j] = 255
 
@@ -158,14 +158,7 @@ def minutiaeExtraction(s):
 	cv2.imwrite(s + "_minutiae.bmp", img3)
 	file.close()
 	
-	
-minutiaeExtraction('101_1')
-minutiaeExtraction('101_2')
-minutiaeExtraction('101_3')
-minutiaeExtraction('101_4')
-minutiaeExtraction('101_5')
-minutiaeExtraction('101_6')
-minutiaeExtraction('102_1')
-minutiaeExtraction('102_2')
-minutiaeExtraction('102_3')
-minutiaeExtraction('102_4')
+s = "resultados/10%i_%i"
+for i in range(1, 3):
+	for j in range(1, int(sys.argv[1])):
+		minutiaeExtraction(s % (i, j))
