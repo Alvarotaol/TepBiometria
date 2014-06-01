@@ -160,8 +160,8 @@ def minutiaeExtraction(s):
 	file.close()
 	
 s = "img/10%i_%i"
-for i in range(1, 6):
+for i in range(1, 10):
 	for j in range(1, 9):
 		minutiaeExtraction(s%(i, j))
-#for i in range(1, 9):
-#	minutiaeExtraction("img/110_%i"%i)
+for i in range(1, 9):
+	minutiaeExtraction("img/110_%i"%i)

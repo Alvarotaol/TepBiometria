@@ -81,7 +81,15 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 		for j in range(i+1, coord2Size-1):
 			if coord1[i][2] == coord2[j][2]:
 				radDist = abs(coord1[i][0] - coord2[i][0])
-				radAngle = abs(coord1[i][1] - coord2[i][1])*10
+				radAngle = abs(coord1[i][1] - coord2[i][1])
+				# Correção do 8 com 1
+				if radAngle == 7:
+					radAngle = 1
+				# Caso não sejam adjacentes, punição. Caso sejam, adiciona peso
+				if radAngle > 1:
+					radAngle = tresh
+				else:
+					radAngle * 20
 				if radDist + radAngle <	tresh:
 					matchQt = matchQt + 1
 			
