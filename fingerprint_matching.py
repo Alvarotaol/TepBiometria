@@ -6,14 +6,30 @@ from sklearn import svm
 # Funcao de calculo das coordenadas polares
 def pol(x, y, a, b, c):
 	dist = np.sqrt((a-x)**2 + (b-y)**2)
+	
+	xVar = a - x
+	yVar = b - y
 	ang = 0
-	if a-x != 0:
-		ang = np.arctan((b-y)/(a-x))
+	if xVar >= 0:
+		if yVar >= 0:
+			ang = 2
+		elif yVar < 0:
+			ang = 4
+	elif xVar < 0:
+		if yVar < 0:
+			ang = 6
+		elif xVar >= 0:
+			ang = 8
+	
+	if abs(xVar) > abs(yVar):
+		ang -= 1
 	return [dist, ang, c]
 
 
 # Calculo de matching
 def matchCalc(s1, s2, matchList, matchClass, classValue):
+	print s1
+	print s2
 	coord1 = []
 	coord2 = []
 	matchScore = 0
@@ -23,7 +39,7 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	radAngle = 0.0
 	angCor1 = 0
 	angCor2 = 0
-	tresh = 20
+	tresh = 40
 
 	file = open(s1 + '_coord.txt', 'r')
 	line = file.readline().strip()
@@ -52,9 +68,7 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 		coord2.append(pol(int(lineList[0]), int(lineList[1]), coord2[0][0], coord2[0][1], coord2[0][2]))
 		line = file.readline().strip()
 	file.close()
-	
-	angCor = np.arctan((coord1[1][1] - coord1[0][1])/(coord1[1][0] - coord1[0][0])) - np.arctan((coord2[1][1]-coord2[0][1])/(coord2[1][0]-coord2[0][0]))
-	
+		
 	# Comparacao de minutiaes
 	coord1Size = len(coord1)
 	coord2Size = len(coord2)
@@ -67,7 +81,15 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 		for j in range(i+1, coord2Size-1):
 			if coord1[i][2] == coord2[j][2]:
 				radDist = abs(coord1[i][0] - coord2[i][0])
-				radAngle = abs(coord1[i][1] - coord2[i][1] + angCor)
+				radAngle = abs(coord1[i][1] - coord2[i][1])
+				# Correção do 8 com 1
+				if radAngle == 7:
+					radAngle = 1
+				# Caso não sejam adjacentes, punição. Caso sejam, adiciona peso
+				if radAngle > 1:
+					radAngle = tresh
+				else:
+					radAngle * 20
 				if radDist + radAngle <	tresh:
 					matchQt = matchQt + 1
 			
@@ -85,9 +107,9 @@ predictClass = []
 
 # Calculo de matching
 s = "img/10%i_%i"
-for i in range(1, 10):
+for i in range(1, 6):
 	for j in range(1, 9):
-		for k in range(i, 10):
+		for k in range(i, 6):
 			for l in range(j+1, 9):
 				if j <= 5:
 					if i == k:
@@ -96,19 +118,18 @@ for i in range(1, 10):
 						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 0)
 				else:
 					if i == k:
-						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 1)
+						matchCalc(s%(i, j), s%(k, l), predictList, predictClass, 1)
 					else:
-						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 0)
+						matchCalc(s%(i, j), s%(k, l), predictList, predictClass, 0)
 	
-# Aprendizado e verificacao
-print("Match List:\n");
-print(matchList)
-#print(matchClass)
-print("Pred List\n");
-print(predictList)
-#print(predictClass)
-
 clf = svm.SVC(kernel='linear')
 clf.fit(matchList, matchClass)
-print("E eu que sei?\n")
-print(clf.predict(predictList))
+
+result = clf.predict(predictList)
+
+matching = 0
+for i in range(0, len(result)):
+	if result[i] == predictClass[i]:
+		matching += 1
+print matching
+print len(result)
