@@ -52,3 +52,5 @@ s = "img/10%i_%i"
 for i in range(1, 10):
 	for j in range(1, 9):
 		imageEnhancement(s%(i,j))
+for i in range(1, 9):
+	imageEnhancement("img/110_%i"%i)
