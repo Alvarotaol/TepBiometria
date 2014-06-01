@@ -25,6 +25,23 @@ def pol(x, y, a, b, c):
 		ang -= 1
 	return [dist, ang, c]
 
+#le as coordenadas cartesianas e as converte para polares
+def lerArquivo(s):
+	coord = []
+	file = open(s + '_coord.txt', 'r')
+	line = file.readline().strip()
+	lineList = line.split(',')
+	coord.append([int(lineList[0]), int(lineList[1]), -1])
+	line = file.readline().strip()
+	lineList = line.split(',')
+	coord.append([int(lineList[0]), int(lineList[1]), -1])
+	line = file.readline().strip()
+	while line != '':
+		lineList = line.split(',')
+		coord.append(pol(int(lineList[0]), int(lineList[1]), coord[0][0], coord[0][1], coord[0][2]))
+		line = file.readline().strip()
+	file.close()
+	return coord
 
 # Calculo de matching
 def matchCalc(s1, s2, matchList, matchClass, classValue):
@@ -41,33 +58,8 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	angCor2 = 0
 	tresh = 40
 
-	file = open(s1 + '_coord.txt', 'r')
-	line = file.readline().strip()
-	lineList = line.split(',')
-	coord1.append([int(lineList[0]), int(lineList[1]), -1])
-	line = file.readline().strip()
-	lineList = line.split(',')
-	coord1.append([int(lineList[0]), int(lineList[1]), -1])
-	line = file.readline().strip()
-	while line != '':
-		lineList = line.split(',')
-		coord1.append(pol(int(lineList[0]), int(lineList[1]), coord1[0][0], coord1[0][1], coord1[0][2]))
-		line = file.readline().strip()
-	file.close()
-	
-	file = open(s2 + '_coord.txt', 'r')
-	line = file.readline().strip()
-	lineList = line.split(',')
-	coord2.append([int(lineList[0]), int(lineList[1]), -1])
-	line = file.readline().strip()
-	lineList = line.split(',')
-	coord2.append([int(lineList[0]), int(lineList[1]), -1])
-	line = file.readline().strip()
-	while line != '':
-		lineList = line.split(',')
-		coord2.append(pol(int(lineList[0]), int(lineList[1]), coord2[0][0], coord2[0][1], coord2[0][2]))
-		line = file.readline().strip()
-	file.close()
+	coord1 = lerArquivo(s1)
+	coord2 = lerArquivo(s2)
 		
 	# Comparacao de minutiaes
 	coord1Size = len(coord1)
@@ -82,10 +74,10 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 			if coord1[i][2] == coord2[j][2]:
 				radDist = abs(coord1[i][0] - coord2[i][0])
 				radAngle = abs(coord1[i][1] - coord2[i][1])
-				# Correção do 8 com 1
+				# Correcao do 8 com 1
 				if radAngle == 7:
 					radAngle = 1
-				# Caso não sejam adjacentes, punição. Caso sejam, adiciona peso
+				# Caso nao sejam adjacentes, punicao. Caso sejam, adiciona peso
 				if radAngle > 1:
 					radAngle = tresh
 				else:
@@ -121,15 +113,17 @@ for i in range(1, 6):
 						matchCalc(s%(i, j), s%(k, l), predictList, predictClass, 1)
 					else:
 						matchCalc(s%(i, j), s%(k, l), predictList, predictClass, 0)
-	
+
+print("Primeira parte")
 clf = svm.SVC(kernel='linear')
 clf.fit(matchList, matchClass)
 
 result = clf.predict(predictList)
-
+print(result)
 matching = 0
 for i in range(0, len(result)):
 	if result[i] == predictClass[i]:
 		matching += 1
 print matching
 print len(result)
+print(result)
