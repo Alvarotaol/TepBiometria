@@ -49,6 +49,6 @@ def imageEnhancement(s):
 	cv2.imwrite(s + "_skel.bmp", img)
 	
 s = "img/10%i_%i"
-for i in range(1, 10):
+for i in range(1, 6):
 	for j in range(1, 9):
 		imageEnhancement(s%(i,j))
