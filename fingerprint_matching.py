@@ -10,18 +10,18 @@ def pol(x, y, a, b, c):
 	xVar = a - x
 	yVar = b - y
 	ang = 0
-	if xVar >= 0:
-		if yVar >= 0:
-			ang = 2
-		elif yVar < 0:
-			ang = 4
-	elif xVar < 0:
-		if yVar < 0:
-			ang = 6
-		elif xVar >= 0:
-			ang = 8
+	if yVar >= 0:
+		if xVar >= 0:
+			ang = 1
+		else:
+			ang = 3
+	else:
+		if xVar < 0:
+			ang = 5
+		else:
+			ang = 7
 	
-	if abs(xVar) > abs(yVar):
+	if ((ang % 4 == 1 and abs(xVar) > abs(yVar)) or (ang % 4 == 3 and abs(xVar) <= abs(yVar))):
 		ang -= 1
 	return [dist, ang, c]
 
@@ -45,8 +45,6 @@ def lerArquivo(s):
 
 # Calculo de matching
 def matchCalc(s1, s2, matchList, matchClass, classValue):
-	print s1
-	print s2
 	coord1 = []
 	coord2 = []
 	matchScore = 0
@@ -56,7 +54,7 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	radAngle = 0.0
 	angCor1 = 0
 	angCor2 = 0
-	tresh = 40
+	tresh = 10
 
 	coord1 = lerArquivo(s1)
 	coord2 = lerArquivo(s2)
@@ -72,8 +70,8 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	for i in range(2, coord1Size-1):
 		for j in range(i+1, coord2Size-1):
 			if coord1[i][2] == coord2[j][2]:
-				radDist = abs(coord1[i][0] - coord2[i][0])
-				radAngle = abs(coord1[i][1] - coord2[i][1])
+				radDist = abs(coord1[i][0] - coord2[j][0])
+				radAngle = abs(coord1[i][1] - coord2[j][1])
 				# Correcao do 8 com 1
 				if radAngle == 7:
 					radAngle = 1
@@ -81,8 +79,8 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 				if radAngle > 1:
 					radAngle = tresh
 				else:
-					radAngle * 20
-				if radDist + radAngle <	tresh:
+					radAngle * 160
+				if radDist  < tresh:
 					matchQt = matchQt + 1
 			
 	# Calculo final
@@ -126,4 +124,5 @@ for i in range(0, len(result)):
 		matching += 1
 print matching
 print len(result)
+print "Matchclass ", len(matchClass)
 print(result)
