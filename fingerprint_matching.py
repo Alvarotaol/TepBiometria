@@ -84,20 +84,21 @@ predictList = []
 predictClass = []
 
 # Calculo de matching
-s = "resultados/"
-matchCalc(s + '101_1', s + '101_2', matchList, matchClass, 1)
-matchCalc(s + '102_1', s + '102_3', matchList, matchClass, 1)
-matchCalc(s + '101_3', s + '102_3', matchList, matchClass, 0)
-
-#matchCalc(s + '101_5', s + '101_6', predictList, predictClass, 1)
-#matchCalc(s + '101_1', s + '101_6', predictList, predictClass, 1)
-matchCalc(s + '101_1', s + '101_3', predictList, predictClass, 1)
-matchCalc(s + '101_5', s + '101_2', predictList, predictClass, 1)
-
-matchCalc(s + '102_1', s + '101_2', predictList, predictClass, 0)
-matchCalc(s + '102_3', s + '101_1', predictList, predictClass, 0)
-matchCalc(s + '102_4', s + '101_5', predictList, predictClass, 0)
-matchCalc(s + '102_2', s + '101_3', predictList, predictClass, 0)
+s = "img/10%i_%i"
+for i in range(1, 10):
+	for j in range(1, 9):
+		for k in range(i, 10):
+			for l in range(j+1, 9):
+				if j <= 5:
+					if i == k:
+						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 1)
+					else:
+						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 0)
+				else:
+					if i == k:
+						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 1)
+					else:
+						matchCalc(s%(i, j), s%(k, l), matchList, matchClass, 0)
 	
 # Aprendizado e verificacao
 print("Match List:\n");

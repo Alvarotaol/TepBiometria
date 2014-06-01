@@ -39,6 +39,7 @@ def searchPath(img1, img2, x, y, distance):
 
 
 def minutiaeExtraction(s):
+	print s
 	file = open(s + '_coord.txt', 'w')
 
 	img = cv2.imread(s + '_skel.bmp', 0)
@@ -158,7 +159,7 @@ def minutiaeExtraction(s):
 	cv2.imwrite(s + "_minutiae.bmp", img3)
 	file.close()
 	
-s = "resultados/10%i_%i"
-for i in range(1, 3):
-	for j in range(1, int(sys.argv[1])):
-		minutiaeExtraction(s % (i, j))
+s = "img/10%i_%i"
+for i in range(1, 10):
+	for j in range(1, 9):
+		minutiaeExtraction(s%(i, j))
