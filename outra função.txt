@@ -1,0 +1,7 @@
+for i in range(0, len(tsist)):
+	for j in range(i, len(tsist)):
+		teste.append([tsist[i], tsist[j]])
+		if tsist[i][0] == tsist[j][0]:
+			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 1)
+		else:
+			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 0)
