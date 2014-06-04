@@ -1,0 +1,62 @@
+ and abs(coord1[i][1] - coord2[i][1]) < 2
+ 
+ for i in range(0, len(tsist)):
+	for j in range(i, len(tsist)):
+		teste.append([tsist[i], tsist[j]])
+		if tsist[i][0] == tsist[j][0]:
+			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 1)
+		else:
+			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 0)
+
+	Selecionados, sem ângulo, 1d, thresh 15
+309 total acertos
+379 resultados
+11 FN
+58 FP
+273 não aceitos
+	
+	Selecionados, com ângulo, 1d, thresh 15
+336 total acertos
+379 resultados
+21 FN
+21 FP
+320 não aceitos
+
+	Todos, com ângulo, 1d, thresh 15
+1583 total acertos
+1935 resultados
+243 FN
+109 FP
+1717 não aceitos
+
+	Todos, com ângulo, 1d, thresh 10
+1634 total acertos
+1935 resultados
+259 FN
+42 FP
+1800 não aceitos
+
+	Todos, com ângulo, 1d, thresh 9.80665
+1636 total acertos
+1935 resultados
+259 FN
+40 FP
+1802 não aceitos
+
+	Todos, sem ângulo, 1d, thresh 15
+1431 total acertos
+1935 resultados
+194 FN
+310 FP
+1467 não aceitos
+
+
+Amostras usadas pra treinar
+
+matchCalc(esse(1, 1), esse(1, 4), matchList, matchClass, 1)
+matchCalc(esse(2, 2), esse(2, 7), matchList, matchClass, 1)
+matchCalc(esse(3, 1), esse(3, 2), matchList, matchClass, 1)
+
+matchCalc(esse(1, 1), esse(2, 7), matchList, matchClass, 0)
+matchCalc(esse(2, 2), esse(4, 1), matchList, matchClass, 0)
+matchCalc(esse(1, 2), esse(8, 7), matchList, matchClass, 0)

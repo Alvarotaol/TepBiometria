@@ -60,7 +60,7 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	radAngle = 0.0
 	angCor1 = 0
 	angCor2 = 0
-	tresh = 20
+	tresh = 9.80665
 
 	coord1 = lerArquivo(s1)
 	coord2 = lerArquivo(s2)
@@ -69,21 +69,14 @@ def matchCalc(s1, s2, matchList, matchClass, classValue):
 	matchQt1 = 0
 	matchQt2 = 0
 	
-	for i in range(2, len(coord1)):
-		minQt[coord1[i][1]] += 1;
-	for i in range(2, len(coord2)):
-		minQt[coord2[i][1]] -= 1;
-	for i in range(0, 8):
-		matchQt1 += abs(minQt[i]);
-		
 	for i in range(2, min(len(coord1), len(coord2))):
-		if abs(coord1[i][0] - coord2[i][0]) < tresh:
+		if abs(coord1[i][0] - coord2[i][0]) < tresh and abs(coord1[i][1] - coord2[i][1]) < 2:
 			matchQt2 += 1	
 				
 	# Calculo final
 	matchList.append([(float)(matchQt2)/(float)(len(coord1)+len(coord2))])
 	matchClass.append(classValue)
-	#print s1, s2, (float)(matchQt2)/(float)(len(coord1)+len(coord2)), classValue
+	print s1, s2, (float)(matchQt2)/(float)(len(coord1)+len(coord2)), matchQt2**2, classValue
 
 def esse(i, j):
 	s1 = "img/1"
@@ -104,18 +97,24 @@ prob = []
 tsist = [[1,1],[1,2],[2,2],[2,7],[3,1],[3,2],[4,1],[4,2],[4,3],[4,4],[5,1],[5,2],[5,3],[5,7],[5,8],[6,2],[6,3],[6,8],[8,5],[8,6],[8,7],[9,2],[9,3],[9,6],[10,1],[10,2],[10,3]]
 
 # Calculo de matching
-matchCalc(esse(1, 1), esse(1, 2), matchList, matchClass, 1)
+matchCalc(esse(1, 1), esse(1, 4), matchList, matchClass, 1)
+matchCalc(esse(2, 2), esse(2, 7), matchList, matchClass, 1)
 matchCalc(esse(3, 1), esse(3, 2), matchList, matchClass, 1)
-matchCalc(esse(1, 1), esse(2, 1), matchList, matchClass, 0)
-matchCalc(esse(1, 1), esse(8, 7), matchList, matchClass, 0)
 
-for i in range(0, len(tsist)):
-	for j in range(i, len(tsist)):
-		teste.append([tsist[i], tsist[j]])
-		if tsist[i][0] == tsist[j][0]:
-			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 1)
-		else:
-			matchCalc(esse(tsist[i][0], tsist[i][1]), esse(tsist[j][0], tsist[j][1]), predictList, predictClass, 0)
+matchCalc(esse(1, 1), esse(2, 7), matchList, matchClass, 0)
+matchCalc(esse(2, 2), esse(4, 1), matchList, matchClass, 0)
+matchCalc(esse(1, 2), esse(8, 7), matchList, matchClass, 0)
+
+for i in range(1, 11):
+	for j in range(1, 9):
+		for k in range(i, 11):
+			for l in range(j, 9):
+				if [i, j] != [6, 1] and [k,l] != [6, 1]:
+					teste.append([[i, j],[k,l]])
+					if i == k:
+						matchCalc(esse(i, j), esse(k, l), predictList, predictClass, 1)
+					else:
+						matchCalc(esse(i, j), esse(k, l), predictList, predictClass, 0)
 
 # Treinamento do SVM
 clf = svm.SVC(kernel = 'linear')
@@ -129,17 +128,29 @@ result = clf.predict(predictList)
 matching = 0
 fnmr = 0
 fmr = 0
+zerinho = 0
+ou_um = 0
+outr = 0
+asd = 0
+	
 for i in range(0, len(result)):
+	if result[i] == 0:
+		zerinho += 1
+	else:
+		ou_um += 1
+	if predictClass[i] == 0:
+		outr += 1
+	else:
+		asd += 1
 	if result[i] == predictClass[i]:
 		matching += 1
-		print 'X'
 	else:
-		print teste[i], result[i]
 		if(result[i] == 0):
 			fnmr += 1
 		else:
 			fmr += 1
 
+print zerinho, ou_um, outr, asd
 print "Quantidade de acertos: ", matching
 print "Quantidade de resultados: ", len(result)
 print "Taxa de acertos: ", float(matching)/len(result)
